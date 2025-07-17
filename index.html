@@ -8,7 +8,130 @@
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap" rel="stylesheet" />
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <style>
-    /* 스타일은 원본 그대로 유지 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pretendard', sans-serif;
+    }
+
+    body {
+      line-height: 1.6;
+      color: #333;
+      background-color: #fff;
+    }
+
+    header {
+      background-color: #111;
+      color: #fff;
+      padding: 1.5rem 2rem;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      padding-left: 0;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .hero img {
+      width: 100%;
+      max-height: 600px;
+      object-fit: cover;
+      margin-top: 1rem;
+    }
+
+    .section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .portfolio {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .portfolio img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .blog-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .blog-card {
+      flex: 1 1 300px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #fafafa;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .blog-card img {
+      width: 100%;
+      height: auto;
+    }
+
+    .blog-card .content {
+      padding: 1rem;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 600px;
+      margin-top: 2rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .contact-form button {
+      padding: 0.75rem;
+      background-color: #111;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background-color: #eee;
+      margin-top: 4rem;
+    }
   </style>
 </head>
 <body>
@@ -24,29 +147,24 @@
       </ul>
     </nav>
   </header>
+
   <section class="hero">
     <h2 data-aos="fade-up">겁없는 두남자의 질주</h2>
-  <img 
-    src="https://postfiles.pstatic.net/MjAyNTA3MTdfMjI5/MDAxNzUyNzM5MDA5MzYy.-3UnawejMCvD94zLl5AcWNuiS85o4X6BRM_smmawVgsg.HTzYgmQy49V-bIT2l5XyEZFIS9_-sITDKU0TSeS6H5gg.PNG/137bac50-535b-4729-80a7-487792deb5ae.png&amp;type=w773" 
-    alt="겁없는 두 남자의 질주 이미지" 
-    style="width: 100%; max-height: 600px; object-fit: cover; margin-top: 1rem;" 
-    data-aos="fade-up"
-  />
-
     <img 
       src="https://postfiles.pstatic.net/MjAyNTA3MTdfMjI5/MDAxNzUyNzM5MDA5MzYy.-3UnawejMCvD94zLl5AcWNuiS85o4X6BRM_smmawVgsg.HTzYgmQy49V-bIT2l5XyEZFIS9_-sITDKU0TSeS6H5gg.PNG/137bac50-535b-4729-80a7-487792deb5ae.png?type=w773" 
       alt="겁없는 두 남자의 질주 이미지" 
-      style="width: 100%; max-height: 600px; object-fit: cover; margin-top: 1rem;" 
       data-aos="fade-up"
     />
   </section>
+
   <section class="section" id="about">
     <h2 data-aos="fade-right">소개</h2>
     <p data-aos="fade-up">
-      겁없이 흉가,폐가,폐병원을 찾아다니는 두남자!.<br>
+      겁없이 흉가, 폐가, 폐병원을 찾아다니는 두남자!<br>
       직접 찍고 직접 편집해서 올리는 능력자들!
     </p>
   </section>
+
   <section class="section" id="portfolio">
     <h2 data-aos="fade-right">방문지</h2>
     <div class="portfolio">
@@ -56,6 +174,7 @@
       <img src="https://via.placeholder.com/400x300" alt="작업물 4" data-aos="zoom-in" />
     </div>
   </section>
+
   <section class="section" id="youtube">
     <h2 data-aos="fade-right">유튜브 채널</h2>
     <p data-aos="fade-up">비하인드 영상 및 풀영상을 만나보세요.</p>
@@ -63,6 +182,7 @@
       <iframe width="100%" height="100%" src="https://www.youtube.com/embed?listType=user_uploads&list=%ED%96%89%EB%B3%B6%EC%95%84" title="YouTube video" frameborder="0" allowfullscreen></iframe>
     </div>
   </section>
+
   <section class="section" id="blog">
     <h2 data-aos="fade-right">블로그</h2>
     <p data-aos="fade-up">탐험 후 글씨로 그리는 탐험지.</p>
@@ -76,6 +196,7 @@
       </div>
     </div>
   </section>
+
   <section class="section" id="contact">
     <h2 data-aos="fade-right">문의하기</h2>
     <form class="contact-form" action="https://formspree.io/f/moqgrzpn" method="POST">
@@ -85,9 +206,11 @@
       <button type="submit">보내기</button>
     </form>
   </section>
+
   <footer>
     © 2025 홍아리 스타일. 모든 권리 보유.
   </footer>
+
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
     AOS.init();
