@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,9 +9,11 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
   <style>
     :root {
-      --main-color: #000;
-      --accent-color: #ff9a9e;
-      --bg-color: #fff;
+      --main-color: #f5f5f5;
+      --accent-color: #ff6f91;
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --border-color: #333;
     }
     * {
       margin: 0;
@@ -24,7 +27,7 @@
       color: var(--main-color);
     }
     header {
-      background: white;
+      background: #1c1c1c;
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
@@ -32,7 +35,7 @@
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
     }
     header h1 {
       font-size: 1.5rem;
@@ -53,13 +56,13 @@
       color: var(--accent-color);
     }
     .hero {
-      background: url('https://via.placeholder.com/1600x800') no-repeat center/cover;
+      background: url('https://via.placeholder.com/1600x800/000000/ffffff') no-repeat center/cover;
       height: 85vh;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
     }
     .hero h2 {
       font-size: 3rem;
@@ -73,6 +76,7 @@
     .section h2 {
       font-size: 2rem;
       margin-bottom: 1rem;
+      color: var(--accent-color);
     }
     .portfolio {
       display: grid;
@@ -92,13 +96,15 @@
     .contact-form input,
     .contact-form textarea {
       padding: 0.75rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-color);
+      background: #2a2a2a;
+      color: var(--main-color);
       border-radius: 6px;
       font-size: 1rem;
     }
     .contact-form button {
       padding: 0.75rem;
-      background: var(--main-color);
+      background: var(--accent-color);
       color: white;
       border: none;
       font-size: 1rem;
@@ -112,11 +118,11 @@
       margin-top: 1.5rem;
     }
     .blog-card {
-      border: 1px solid #ddd;
+      border: 1px solid var(--border-color);
       border-radius: 10px;
       overflow: hidden;
       transition: transform 0.3s;
-      background: #fff;
+      background: var(--card-bg);
     }
     .blog-card:hover {
       transform: translateY(-5px);
@@ -141,7 +147,7 @@
     footer {
       text-align: center;
       padding: 2rem;
-      background: #f5f5f5;
+      background: #1c1c1c;
       font-size: 0.9rem;
     }
     @media screen and (max-width: 768px) {
@@ -180,16 +186,17 @@
   <section class="section" id="about">
     <h2 data-aos="fade-right">소개</h2>
     <p data-aos="fade-up">
-      3인 1조 탐험가 입니다, 때로는 혼자 탐험하기도 합니다..<br>
+      3인 1조 탐험가입니다. 때로는 혼자서도 탐험에 나섭니다. 우리는 흉가, 폐가, 미스터리한 장소들을 영상으로 담아냅니다.<br>
+      탐험은 단순한 호기심이 아닌, 그 속에 담긴 이야기와 역사까지도 함께 기록하는 작업입니다.
     </p>
   </section>
   <section class="section" id="portfolio">
     <h2 data-aos="fade-right">탐방 탐험지</h2>
     <div class="portfolio">
-      <img src="https://via.placeholder.com/400x300" alt="작업물 1" data-aos="zoom-in" />
-      <img src="https://via.placeholder.com/400x300" alt="작업물 2" data-aos="zoom-in" />
-      <img src="https://via.placeholder.com/400x300" alt="작업물 3" data-aos="zoom-in" />
-      <img src="https://via.placeholder.com/400x300" alt="작업물 4" data-aos="zoom-in" />
+      <img src="https://via.placeholder.com/400x300" alt="경주 좋은상록병원" data-aos="zoom-in" />
+      <img src="https://via.placeholder.com/400x300" alt="-" data-aos="zoom-in" />
+      <img src="https://via.placeholder.com/400x300" alt="-" data-aos="zoom-in" />
+      <img src="https://via.placeholder.com/400x300" alt="-" data-aos="zoom-in" />
     </div>
   </section>
   <section class="section" id="youtube">
@@ -201,26 +208,12 @@
   </section>
   <section class="section" id="blog">
     <h2 data-aos="fade-right">블로그</h2>
-    <p data-aos="fade-up">디자인에 대한 생각과 작업 노트를 기록합니다.</p>
+    <p data-aos="fade-up">탐험지를 다녀온후 일기를 쓰고있어요.</p>
     <div class="blog-cards">
       <div class="blog-card" data-aos="fade-up">
         <img src="https://via.placeholder.com/400x200" alt="blog1">
         <div class="content">
-          <h3>감성 사진 촬영의 비결</h3>
-          <a href="https://blog.naver.com/tkfkdgo2311" target="_blank">자세히 보기 →</a>
-        </div>
-      </div>
-      <div class="blog-card" data-aos="fade-up" data-aos-delay="100">
-        <img src="https://via.placeholder.com/400x200" alt="blog2">
-        <div class="content">
-          <h3>포트폴리오 구성 전략</h3>
-          <a href="https://blog.naver.com/tkfkdgo2311" target="_blank">자세히 보기 →</a>
-        </div>
-      </div>
-      <div class="blog-card" data-aos="fade-up" data-aos-delay="200">
-        <img src="https://via.placeholder.com/400x200" alt="blog3">
-        <div class="content">
-          <h3>프리랜서 디자이너의 하루</h3>
+          <h3>탐험지를 다녀온후 느낀점을 기록하자.</h3>
           <a href="https://blog.naver.com/tkfkdgo2311" target="_blank">자세히 보기 →</a>
         </div>
       </div>
@@ -239,8 +232,6 @@
     © 2025 행볶아요 BLOG. 행볶아요 팀 모든 권리 보유.
   </footer>
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
+  <script>AOS.init();</script>
 </body>
 </html>
