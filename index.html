@@ -1,87 +1,191 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>어두운 이미지 게시판</title>
-    <style>
-        /* 전체 배경과 기본 스타일 설정 */
-        body {
-            background-color: #121212; /* 어두운 배경색 */
-            color: #ffffff; /* 기본 텍스트 색상 */
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>어두운 이미지 갤러리</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #121212;
+    font-family: Arial, sans-serif;
+    color: #fff;
+  }
 
-        /* 헤더 스타일 */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+header {
+  padding: 20px;
+  text-align: center;
+  font-size: 2em;
+  font-weight: bold;
+}
 
-        header h1 {
-            font-size: 2.5em;
-            margin: 0;
-            color: #ffffff;
-        }
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
 
-        /* 게시판 컨테이너 */
-        .board {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+.card {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-        /* 게시물 카드 스타일 */
-        .card {
-            background-color: #1e1e1e; /* 카드 배경색 */
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-        }
+.card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s;
+}
 
-        /* 이미지 스타일 */
-        .card img {
-            width: 100%;
-            height: 600px; /* 고정 높이 */
-            object-fit: cover;
-            display: block;
-        }
+/* 모달 스타일 */
+.modal {
+  display: none; /* 숨김 상태 */
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0,0,0,0.9);
+  align-items: center;
+  justify-content: center;
+}
 
-        /* 제목 또는 설명 */
-        .card .caption {
-            padding: 10px;
-            font-size: 1em;
-            color: #ddd;
-        }
-    </style>
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.modal img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+/* 닫기 버튼 */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  padding: 0 20px;
+}
+
+.prev, .next {
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+  user-select: none;
+  padding: 10px;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.6);
+}
+</style>
 </head>
 <body>
-    <header>
-        <h1>어두운 이미지 게시판</h1>
-    </header>
-    <div class="board">
-        <!-- 게시물 카드 예시 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 1" />
-            <div class="caption">이것은 이미지 설명입니다.</div>
-        </div>
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 2" />
-            <div class="caption">두 번째 이미지 설명입니다.</div>
-        </div>
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 3" />
-            <div class="caption">세 번째 이미지 설명입니다.</div>
-        </div>
-        <!-- 더 많은 게시물 추가 가능 -->
+
+<header>어두운 이미지 갤러리</header>
+
+<div class="gallery" id="gallery">
+  <!-- 이미지 카드 예시 -->
+  <div class="card" data-index="0">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 1" />
+  </div>
+  <div class="card" data-index="1">
+    <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 2" />
+  </div>
+  <div class="card" data-index="2">
+    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 3" />
+  </div>
+  <!-- 더 많은 이미지 추가 가능 -->
+</div>
+
+<!-- 이미지 확대 모달 -->
+<div class="modal" id="imageModal">
+  <div class="modal-content">
+    <span class="close" id="closeBtn">&times;</span>
+    <div class="nav">
+      <div class="prev" id="prevBtn">&#10094;</div>
+      <div class="next" id="nextBtn">&#10095;</div>
     </div>
-</body>
-</html>
+    <img src="" alt="확대 이미지" id="modalImage" />
+  </div>
+</div>
+
+<script>
+  const gallery = document.getElementById('gallery');
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  const closeBtn = document.getElementById('closeBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  const images = [
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    // 필요시 더 추가
+];
+
+let currentIndex = 0;
+
+// 카드 클릭 시 모달 열기
+gallery.addEventListener('click', (e) => {
+  if(e.target.tagName === 'IMG') {
+    currentIndex = parseInt(e.target.parentElement.dataset.index);
+    openModal(currentIndex);
+  }
+});
+
+function openModal(index) {
+  modal.style.display = 'flex';
+  modalImg.src = images[index];
+}
+
+closeBtn.onclick = () => {
+  modal.style.display = 'none';
+};
+
+window.onclick = (e) => {
+  if(e.target === modal) {
+    modal.style.display = 'none';
+  }
+};
+
+// 이전 버튼
+prevBtn.onclick = () => {
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  modalImg.src = images[currentIndex];
+};
+
+// 다음 버튼
