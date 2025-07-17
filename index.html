@@ -1,191 +1,92 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>어두운 이미지 갤러리</title>
-<style>
-  body {
-    margin: 0;
-    background-color: #121212;
-    font-family: Arial, sans-serif;
-    color: #fff;
-  }
-
-header {
-  padding: 20px;
-  text-align: center;
-  font-size: 2em;
-  font-weight: bold;
-}
-
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  padding: 20px;
-}
-
-.card {
-  background-color: #1e1e1e;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-.card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.2s;
-}
-
-/* 모달 스타일 */
-.modal {
-  display: none; /* 숨김 상태 */
-  position: fixed;
-  z-index: 9999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: rgba(0,0,0,0.9);
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 90%;
-}
-
-.modal img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-}
-
-/* 닫기 버튼 */
-.close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  color: #fff;
-  font-size: 2em;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.nav {
-  position: absolute;
-  top: 50%;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  transform: translateY(-50%);
-  padding: 0 20px;
-}
-
-.prev, .next {
-  color: #fff;
-  font-size: 2em;
-  cursor: pointer;
-  user-select: none;
-  padding: 10px;
-  background-color: rgba(0,0,0,0.3);
-  border-radius: 50%;
-  transition: background-color 0.2s;
-}
-
-.prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.6);
-}
-</style>
+  <meta charset="UTF-8">
+  <title>간단한 게시판</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+    }
+    .board {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .post-form input, .post-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .post-form button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .post-form button:hover {
+      background-color: #0056b3;
+    }
+    .posts {
+      margin-top: 30px;
+    }
+    .post {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    .post h3 {
+      margin: 0;
+    }
+    .post p {
+      margin: 5px 0 0;
+    }
+  </style>
 </head>
 <body>
-
-<header>어두운 이미지 갤러리</header>
-
-<div class="gallery" id="gallery">
-  <!-- 이미지 카드 예시 -->
-  <div class="card" data-index="0">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 1" />
-  </div>
-  <div class="card" data-index="1">
-    <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 2" />
-  </div>
-  <div class="card" data-index="2">
-    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 3" />
-  </div>
-  <!-- 더 많은 이미지 추가 가능 -->
-</div>
-
-<!-- 이미지 확대 모달 -->
-<div class="modal" id="imageModal">
-  <div class="modal-content">
-    <span class="close" id="closeBtn">&times;</span>
-    <div class="nav">
-      <div class="prev" id="prevBtn">&#10094;</div>
-      <div class="next" id="nextBtn">&#10095;</div>
+  <div class="board">
+    <h1>간단한 게시판</h1>
+    <div class="post-form">
+      <input type="text" id="title" placeholder="제목">
+      <textarea id="content" placeholder="내용"></textarea>
+      <button onclick="addPost()">게시하기</button>
     </div>
-    <img src="" alt="확대 이미지" id="modalImage" />
+    <div class="posts" id="posts">
+      <!-- 게시물이 여기에 추가됩니다 -->
+    </div>
   </div>
-</div>
 
-<script>
-  const gallery = document.getElementById('gallery');
-  const modal = document.getElementById('imageModal');
-  const modalImg = document.getElementById('modalImage');
-  const closeBtn = document.getElementById('closeBtn');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
+  <script>
+    function addPost() {
+      const title = document.getElementById('title').value.trim();
+      const content = document.getElementById('content').value.trim();
 
-  const images = [
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    // 필요시 더 추가
-];
+      if (!title || !content) {
+        alert('제목과 내용을 모두 입력해주세요.');
+        return;
+      }
 
-let currentIndex = 0;
+      const postDiv = document.createElement('div');
+      postDiv.className = 'post';
+      postDiv.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
 
-// 카드 클릭 시 모달 열기
-gallery.addEventListener('click', (e) => {
-  if(e.target.tagName === 'IMG') {
-    currentIndex = parseInt(e.target.parentElement.dataset.index);
-    openModal(currentIndex);
-  }
-});
+      const postsContainer = document.getElementById('posts');
+      postsContainer.prepend(postDiv);
 
-function openModal(index) {
-  modal.style.display = 'flex';
-  modalImg.src = images[index];
-}
-
-closeBtn.onclick = () => {
-  modal.style.display = 'none';
-};
-
-window.onclick = (e) => {
-  if(e.target === modal) {
-    modal.style.display = 'none';
-  }
-};
-
-// 이전 버튼
-prevBtn.onclick = () => {
-  currentIndex = (currentIndex - 1 + images.length) % images.length;
-  modalImg.src = images[currentIndex];
-};
-
-// 다음 버튼
+      // 입력창 초기화
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+    }
+  </script>
+</body>
+</html>
