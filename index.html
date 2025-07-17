@@ -1,236 +1,87 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>행볶아요의 포트폴리오</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600&display=swap" rel="stylesheet" />
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-  <style>
-    :root {
-      --main-color: #f5f5f5;
-      --accent-color: #ff6f91;
-      --bg-color: #121212;
-      --card-bg: #1e1e1e;
-      --border-color: #333;
-    }
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Pretendard', sans-serif;
-      line-height: 1.6;
-      background: var(--bg-color);
-      color: var(--main-color);
-    }
-    header {
-      background: #1c1c1c;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-    }
-    header h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-    nav ul {
-      display: flex;
-      gap: 1rem;
-      list-style: none;
-    }
-    nav a {
-      text-decoration: none;
-      color: var(--main-color);
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    nav a:hover {
-      color: var(--accent-color);
-    }
-    .hero {
-      background: url('https://via.placeholder.com/1600x800/000000/ffffff') no-repeat center/cover;
-      height: 85vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
-    }
-    .hero h2 {
-      font-size: 3rem;
-      text-align: center;
-    }
-    .section {
-      padding: 4rem 2rem;
-      max-width: 1100px;
-      margin: auto;
-    }
-    .section h2 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      color: var(--accent-color);
-    }
-    .portfolio {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-    .portfolio img {
-      width: 100%;
-      display: block;
-      border-radius: 10px;
-    }
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .contact-form input,
-    .contact-form textarea {
-      padding: 0.75rem;
-      border: 1px solid var(--border-color);
-      background: #2a2a2a;
-      color: var(--main-color);
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-    .contact-form button {
-      padding: 0.75rem;
-      background: var(--accent-color);
-      color: white;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    .blog-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    .blog-card {
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-      transition: transform 0.3s;
-      background: var(--card-bg);
-    }
-    .blog-card:hover {
-      transform: translateY(-5px);
-    }
-    .blog-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-    .blog-card .content {
-      padding: 1rem;
-    }
-    .blog-card .content h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-    .blog-card .content a {
-      color: var(--accent-color);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background: #1c1c1c;
-      font-size: 0.9rem;
-    }
-    @media screen and (max-width: 768px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      nav ul {
-        flex-direction: column;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-      }
-      .hero h2 {
-        font-size: 2rem;
-        padding: 0 1rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>어두운 이미지 게시판</title>
+    <style>
+        /* 전체 배경과 기본 스타일 설정 */
+        body {
+            background-color: #121212; /* 어두운 배경색 */
+            color: #ffffff; /* 기본 텍스트 색상 */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+            color: #ffffff;
+        }
+
+        /* 게시판 컨테이너 */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* 게시물 카드 스타일 */
+        .card {
+            background-color: #1e1e1e; /* 카드 배경색 */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+
+        /* 이미지 스타일 */
+        .card img {
+            width: 100%;
+            height: 600px; /* 고정 높이 */
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 제목 또는 설명 */
+        .card .caption {
+            padding: 10px;
+            font-size: 1em;
+            color: #ddd;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>행볶아요 BLOG</h1>
-    <nav>
-      <ul>
-        <li><a href="#about">소개</a></li>
-        <li><a href="#portfolio">탐방 탐험지</a></li>
-        <li><a href="#youtube">유튜브</a></li>
-        <li><a href="#blog">블로그</a></li>
-        <li><a href="#contact">문의</a></li>
-      </ul>
-    </nav>
-  </header>
-  <section class="hero">
-      <h2 style="display: inline-block; margin-right: 10px;">행볶아요 뭐하는 사람들일까?</h2>
-  </section>
-  <section class="section" id="about">
-    <h2 data-aos="fade-right">소개</h2>
-    <p data-aos="fade-up">
-      3인 1조 탐험가입니다. 때로는 혼자서도 탐험에 나섭니다. 우리는 흉가, 폐가, 미스터리한 장소들을 영상으로 담아냅니다.<br>
-      탐험은 단순한 호기심이 아닌, 그 속에 담긴 이야기와 역사까지도 함께 기록하는 작업입니다.
-    </p>
-  </section>
-  <section class="section" id="portfolio">
-    <h2 data-aos="fade-right">탐방 탐험지</h2>
-    <div class="portfolio">
-      <h3 data-aos="fade-up">25.07.16 경주 좋은상록병원</h3>
-      <h3 data-aos="fade-up">-</h3>
-      <h3 data-aos="fade-up">-</h3>
-      <h3 data-aos="fade-up">-</h3>
-    </div>
-  </section>
-  <section class="section" id="youtube">
-    <h2 data-aos="fade-right">유튜브 채널</h2>
-    <p data-aos="fade-up">비하인드 영상 및 풀버전을 유튜브에서 만나보세요.</p>
-    <div style="margin-top:2rem; aspect-ratio: 16/9; max-width: 100%;" data-aos="zoom-in">
-      <iframe width="100%" height="100%" src="https://www.youtube.com/embed/-yiGWaQ57EQ?si=RtjNjAr_OAKgxebN" title="YouTube video" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </section>
-  <section class="section" id="blog">
-    <h2 data-aos="fade-right">블로그</h2>
-    <p data-aos="fade-up">탐험지를 다녀온후 일기를 쓰고있어요.</p>
-    <div class="blog-cards">
-      <div class="blog-card" data-aos="fade-up">
-        <div class="content">
-          <h3>탐험지를 다녀온후 느낀점을 기록하자.</h3>
-          <a href="https://blog.naver.com/tkfkdgo2311" target="_blank">자세히 보기 →</a>
+    <header>
+        <h1>어두운 이미지 게시판</h1>
+    </header>
+    <div class="board">
+        <!-- 게시물 카드 예시 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 1" />
+            <div class="caption">이것은 이미지 설명입니다.</div>
         </div>
-      </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 2" />
+            <div class="caption">두 번째 이미지 설명입니다.</div>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="이미지 3" />
+            <div class="caption">세 번째 이미지 설명입니다.</div>
+        </div>
+        <!-- 더 많은 게시물 추가 가능 -->
     </div>
-  </section>
-  <section class="section" id="contact">
-    <h2 data-aos="fade-right">문의하기</h2>
-    <form class="contact-form" action="https://formspree.io/f/moqgrzpn" method="POST">
-      <input type="text" name="name" placeholder="이름" required />
-      <input type="email" name="email" placeholder="이메일" required />
-      <textarea name="message" rows="5" placeholder="문의 내용" required></textarea>
-      <button type="submit">보내기</button>
-    </form>
-  </section>
-  <footer>
-    © 2025 행볶아요 BLOG. 행볶아요 팀 모든 권리 보유.
-  </footer>
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-  <script>AOS.init();</script>
 </body>
 </html>
