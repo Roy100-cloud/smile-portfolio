@@ -2,91 +2,119 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>간단한 게시판</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-      background-color: #f4f4f4;
-    }
-    h1 {
-      text-align: center;
-    }
-    .board {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .post-form input, .post-form textarea {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    .post-form button {
-      padding: 10px 20px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .post-form button:hover {
-      background-color: #0056b3;
-    }
-    .posts {
-      margin-top: 30px;
-    }
-    .post {
-      border-bottom: 1px solid #ccc;
-      padding: 10px 0;
-    }
-    .post h3 {
-      margin: 0;
-    }
-    .post p {
-      margin: 5px 0 0;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>&#xbbf8;&#xb2c8; &#xc804;&#xc0ac; RPG 2D</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="board">
-    <h1>간단한 게시판</h1>
-    <div class="post-form">
-      <input type="text" id="title" placeholder="제목">
-      <textarea id="content" placeholder="내용"></textarea>
-      <button onclick="addPost()">게시하기</button>
+  <canvas id="gameCanvas"></canvas>
+  <div id="crosshair"></div>
+
+  <div id="topInfo">
+    <div id="hpText" class="infoBadge">HP: 100 / 100</div>
+    <div id="manaText" class="infoBadge mana">MP: 60 / 60</div>
+    <div id="levelText" class="infoBadge subtle">&#xb808;&#xbca8; 1</div>
+    <div id="expText" class="infoBadge subtle">EXP: 0 / 40</div>
+    <div id="skillPointText" class="infoBadge subtle">&#xc2a4;&#xd0ac; &#xd3ec;&#xc778;&#xd2b8; 0</div>
+    <div id="hintText">WASD &#xc774;&#xb3d9; | &#xc88c;&#xd074;&#xb9ad; &#xae30;&#xbcf8; &#xacf5;&#xaca9; | 1~6 &#xc804;&#xc0ac; &#xc2a4;&#xd0ac; | E &#xc0c1;&#xd638;&#xc791;&#xc6a9; | C &#xc2a4;&#xd0ef; | K &#xc2a4;&#xd0ac; | I &#xac00;&#xbc29;</div>
+  </div>
+
+  <div id="uiLayer">
+    <div id="topButtons">
+      <button id="saveButton" type="button">&#xc800;&#xc7a5;</button>
+      <button id="loadButton" type="button">&#xbd88;&#xb7ec;&#xc624;&#xae30;</button>
+      <button id="muteButton" type="button">&#xc74c;&#xc18c;&#xac70;</button>
+      <input id="volumeSlider" type="range" min="0" max="100" value="72" aria-label="&#xbcfc;&#xb968;">
+      <button id="inventoryButton" type="button">&#xac00;&#xbc29;</button>
+      <button id="statsButton" type="button">&#xc2a4;&#xd0ef;</button>
+      <button id="skillsButton" type="button">&#xc2a4;&#xd0ac;</button>
     </div>
-    <div class="posts" id="posts">
-      <!-- 게시물이 여기에 추가됩니다 -->
+
+    <div id="statusHud">
+      <div class="hudRow">
+        <div class="barLabel">&#xc0dd;&#xba85;&#xb825;</div>
+        <div class="barText" id="hpBarText">100 / 100</div>
+      </div>
+      <div id="hpBarContainer"><div id="hpBar"></div></div>
+
+      <div class="hudRow">
+        <div class="barLabel">&#xb9c8;&#xb098;</div>
+        <div class="barText" id="manaBarText">60 / 60</div>
+      </div>
+      <div id="manaBarContainer"><div id="manaBar"></div></div>
+
+      <div class="hudRow">
+        <div class="barLabel">&#xacbd;&#xd5d8;&#xce58;</div>
+        <div class="barText" id="expBarText">0 / 40</div>
+      </div>
+      <div id="expBarContainer"><div id="expBar"></div></div>
+    </div>
+
+    <div id="skillHud">
+      <div id="skillBar"></div>
+    </div>
+
+    <div id="itemHud">
+      <div id="quickSlotBar"></div>
+    </div>
+
+    <div id="dialogueBox" class="panel hidden">
+      <div class="panelHeader">
+        <div id="dialogueName">NPC</div>
+        <button id="dialogueCloseButton" type="button">&#xb2eb;&#xae30;</button>
+      </div>
+      <div id="dialogueText"></div>
+    </div>
+
+    <div id="shopPanel" class="panel hidden">
+      <div class="panelHeader">
+        <div id="shopTitle">&#xc0c1;&#xc810;</div>
+        <button id="shopCloseButton" type="button">&#xb2eb;&#xae30;</button>
+      </div>
+      <div id="shopInfo">&#xace8;&#xb4dc;&#xb85c; &#xc544;&#xc774;&#xd15c;&#xc744; &#xac70;&#xb798;&#xd560; &#xc218; &#xc788;&#xc2b5;&#xb2c8;&#xb2e4;.</div>
+      <div id="goldText">&#xace8;&#xb4dc;: 0</div>
+      <div id="shopItems"></div>
+    </div>
+
+    <div id="statsPanel" class="panel hidden">
+      <div class="panelHeader">
+        <div>&#xc2a4;&#xd0ef;</div>
+        <button id="statsCloseButton" type="button">&#xb2eb;&#xae30;</button>
+      </div>
+      <div id="statPointsText">&#xc2a4;&#xd0ef; &#xd3ec;&#xc778;&#xd2b8; 0</div>
+      <div id="statsContent"></div>
+    </div>
+
+    <div id="skillsPanel" class="panel hidden">
+      <div class="panelHeader">
+        <div>&#xc804;&#xc0ac; &#xc2a4;&#xd0ac;</div>
+        <button id="skillsCloseButton" type="button">&#xb2eb;&#xae30;</button>
+      </div>
+      <div id="skillPointsInfo">&#xc0ac;&#xc6a9; &#xac00;&#xb2a5;&#xd55c; &#xc2a4;&#xd0ac; &#xd3ec;&#xc778;&#xd2b8; 0</div>
+      <div id="skillsContent"></div>
+    </div>
+
+    <div id="inventory" class="panel hidden">
+      <div id="inventoryHeader" class="panelHeader">
+        <div id="inventoryTitle">&#xc778;&#xbca4;&#xd1a0;&#xb9ac;</div>
+        <button id="inventoryCloseButton" type="button">&#xb2eb;&#xae30;</button>
+      </div>
+      <div id="equipmentSection">
+        <div class="sectionTitle">&#xc7a5;&#xbe44;</div>
+        <div id="equipmentContent"></div>
+      </div>
+      <div id="inventorySection">
+        <div class="sectionTitle">&#xc544;&#xc774;&#xd15c;</div>
+        <div id="inventoryContent"></div>
+      </div>
     </div>
   </div>
 
-  <script>
-    function addPost() {
-      const title = document.getElementById('title').value.trim();
-      const content = document.getElementById('content').value.trim();
-
-      if (!title || !content) {
-        alert('제목과 내용을 모두 입력해주세요.');
-        return;
-      }
-
-      const postDiv = document.createElement('div');
-      postDiv.className = 'post';
-      postDiv.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
-
-      const postsContainer = document.getElementById('posts');
-      postsContainer.prepend(postDiv);
-
-      // 입력창 초기화
-      document.getElementById('title').value = '';
-      document.getElementById('content').value = '';
-    }
-  </script>
+  <script src="js/utils.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>

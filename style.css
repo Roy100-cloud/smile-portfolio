@@ -1,0 +1,800 @@
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: "Segoe UI", "Malgun Gothic", sans-serif;
+  background: #0f1b12;
+  color: #f4f0e2;
+}
+
+body {
+  position: relative;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 230, 180, 0.08), transparent 20%),
+    radial-gradient(circle at 80% 15%, rgba(255, 255, 255, 0.04), transparent 24%),
+    linear-gradient(180deg, #6f8f55 0%, #3a5b36 55%, #1f3524 100%);
+}
+
+#crosshair {
+  display: none;
+}
+
+#topInfo {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.infoBadge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(43, 17, 18, 0.82), rgba(23, 10, 11, 0.82));
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+}
+
+.infoBadge.mana {
+  background: linear-gradient(180deg, rgba(21, 40, 84, 0.84), rgba(11, 18, 45, 0.84));
+}
+
+.infoBadge.subtle {
+  background: linear-gradient(180deg, rgba(22, 26, 33, 0.82), rgba(9, 12, 18, 0.82));
+}
+
+#hintText {
+  max-width: 520px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(10, 13, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 244, 224, 0.92);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+}
+
+#uiLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+#topButtons {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+#volumeSlider {
+  width: 124px;
+  accent-color: #f2c56b;
+  cursor: pointer;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.18));
+}
+
+button,
+.shopButton,
+.statButton,
+.skillLearnButton {
+  padding: 10px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(38, 41, 54, 0.95), rgba(14, 17, 25, 0.95));
+  color: #f4f0e2;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+}
+
+button:hover,
+.shopButton:hover,
+.statButton:hover,
+.skillLearnButton:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(60, 66, 84, 0.96), rgba(22, 28, 39, 0.96));
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.24);
+}
+
+button:disabled,
+.shopButton:disabled,
+.statButton:disabled,
+.skillLearnButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
+}
+
+#statusHud,
+#skillHud,
+#itemHud {
+  position: absolute;
+  pointer-events: auto;
+  background:
+    linear-gradient(180deg, rgba(25, 22, 28, 0.9), rgba(7, 10, 16, 0.92)),
+    radial-gradient(circle at top, rgba(255, 219, 145, 0.1), transparent 40%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3);
+}
+
+#statusHud {
+  left: 18px;
+  bottom: 18px;
+  width: min(320px, calc(100vw - 36px));
+  padding: 14px 16px;
+  border-radius: 24px;
+}
+
+#skillHud {
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: min(580px, calc(100vw - 420px));
+  min-width: min(440px, calc(100vw - 36px));
+  padding: 14px 16px;
+  border-radius: 24px;
+}
+
+#itemHud {
+  right: 18px;
+  bottom: 18px;
+  width: min(320px, calc(100vw - 36px));
+  padding: 14px 16px;
+  border-radius: 24px;
+}
+
+.hudRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.barLabel {
+  color: rgba(255, 245, 225, 0.84);
+  letter-spacing: 0.04em;
+}
+
+.barText {
+  color: rgba(255, 245, 225, 0.72);
+}
+
+#hpBarContainer,
+#manaBarContainer,
+#expBarContainer {
+  width: 100%;
+  height: 18px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#hpBar,
+#manaBar,
+#expBar {
+  width: 100%;
+  height: 100%;
+  transition: width 0.15s ease;
+}
+
+#hpBar {
+  background: linear-gradient(90deg, #7b1515, #d34f47, #ff8771);
+}
+
+#manaBar {
+  background: linear-gradient(90deg, #133b84, #3978d7, #6ec5ff);
+}
+
+#expBar {
+  background: linear-gradient(90deg, #866b16, #c99d2b, #ffdc6a);
+}
+
+#skillBar {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+#quickSlotBar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.skillSlot {
+  position: relative;
+  min-height: 72px;
+  padding: 8px 6px 7px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(35, 30, 24, 0.9), rgba(12, 11, 16, 0.95));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.skillSlot.locked {
+  opacity: 0.45;
+  filter: saturate(0.4);
+}
+
+.skillSlot.ready {
+  box-shadow: 0 0 0 1px rgba(255, 214, 118, 0.25), 0 0 22px rgba(255, 188, 92, 0.18);
+}
+
+.skillKey {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+  color: rgba(255, 248, 230, 0.72);
+}
+
+.skillIcon {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 4px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 235, 185, 0.34), rgba(255, 255, 255, 0.04));
+}
+
+.skillName {
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.skillCooldown {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255, 227, 169, 0.76);
+}
+
+.quickSlot {
+  position: relative;
+  min-height: 72px;
+  padding: 8px 6px 7px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(180deg, rgba(24, 34, 42, 0.92), rgba(10, 12, 18, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.quickSlot.empty {
+  opacity: 0.6;
+}
+
+.quickSlot.ready {
+  box-shadow: 0 0 0 1px rgba(115, 215, 255, 0.22), 0 0 22px rgba(110, 196, 255, 0.14);
+}
+
+.quickSlot.dragTarget {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px rgba(255, 222, 122, 0.42), 0 0 24px rgba(255, 201, 92, 0.24);
+}
+
+.quickSlotKey {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 11px;
+  color: rgba(255, 248, 230, 0.72);
+}
+
+.quickSlotIcon {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 4px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(circle at 30% 30%, rgba(175, 238, 255, 0.22), rgba(255, 255, 255, 0.04));
+}
+
+.quickSlotIcon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.quickSlotName {
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.quickSlotCount {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 11px;
+  color: rgba(180, 233, 255, 0.8);
+}
+
+.quickSlotOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(9, 13, 20, 0.2), rgba(9, 13, 20, 0.82));
+  transform-origin: bottom;
+  pointer-events: none;
+}
+
+.quickSlotCooldown {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff1c7;
+  opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+}
+
+.quickSlotCooldown.visible {
+  opacity: 1;
+}
+
+.slotClearButton {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(13, 16, 23, 0.9);
+  color: rgba(255, 240, 222, 0.92);
+  font-size: 12px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+}
+
+.slotClearButton:hover {
+  background: rgba(46, 19, 19, 0.96);
+}
+
+.slotControls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.slotMiniButton {
+  padding: 7px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.panel {
+  position: absolute;
+  width: min(440px, calc(100vw - 28px));
+  padding: 14px;
+  border-radius: 22px;
+  box-sizing: border-box;
+  pointer-events: auto;
+  background:
+    linear-gradient(180deg, rgba(28, 24, 27, 0.93), rgba(10, 12, 18, 0.95)),
+    radial-gradient(circle at top, rgba(255, 220, 159, 0.08), transparent 45%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 22px 44px rgba(0, 0, 0, 0.34);
+}
+
+.hidden {
+  display: none;
+}
+
+#inventory.hidden,
+#skillsPanel.hidden,
+#statsPanel.hidden,
+#shopPanel.hidden,
+#dialogueBox.hidden {
+  display: none;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+#dialogueBox {
+  left: 50%;
+  bottom: 124px;
+  transform: translateX(-50%);
+}
+
+#shopPanel {
+  top: 86px;
+  right: 16px;
+  max-height: min(76vh, 760px);
+  overflow: hidden;
+}
+
+#statsPanel {
+  top: 86px;
+  left: 16px;
+  max-height: min(76vh, 760px);
+  overflow: hidden;
+}
+
+#skillsPanel {
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, calc(100vw - 28px));
+  max-height: min(78vh, 860px);
+  overflow: hidden;
+}
+
+#inventory {
+  left: 50%;
+  bottom: 118px;
+  transform: translateX(-50%);
+  width: min(540px, calc(100vw - 28px));
+  max-height: min(74vh, 760px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#dialogueText,
+#shopInfo,
+#goldText,
+#statPointsText,
+#skillPointsInfo {
+  margin-bottom: 12px;
+  line-height: 1.55;
+  color: rgba(249, 241, 221, 0.92);
+}
+
+#shopItems,
+#inventoryContent,
+#equipmentContent,
+#statsContent,
+#skillsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#dialogueText {
+  max-height: 240px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+#shopItems {
+  max-height: 360px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+#statsContent,
+#skillsContent {
+  max-height: 54vh;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.sectionTitle {
+  margin-bottom: 10px;
+  color: rgba(255, 230, 180, 0.85);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+#equipmentSection {
+  margin-bottom: 18px;
+  flex: 0 0 auto;
+}
+
+#inventorySection {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+#inventoryContent {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 340px;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.slot,
+.equipSlot,
+.shopItem,
+.statRow,
+.skillCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.04)),
+    rgba(255, 255, 255, 0.04);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.slot.empty,
+.equipSlot.empty {
+  justify-content: center;
+  color: rgba(255, 240, 220, 0.58);
+}
+
+.slotInfo,
+.shopInfoText,
+.skillCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.itemVisualRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.itemQty {
+  display: inline-flex;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(255, 215, 118, 0.14);
+  color: #ffe0a1;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.itemTooltip {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 10px);
+  min-width: 180px;
+  max-width: 240px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(11, 14, 21, 0.96);
+  border: 1px solid rgba(255, 223, 154, 0.22);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.34);
+  color: #f9efd7;
+  font-size: 12px;
+  line-height: 1.45;
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: opacity 0.14s ease, transform 0.14s ease;
+  z-index: 30;
+}
+
+.itemTooltip div + div {
+  margin-top: 4px;
+}
+
+.slot:hover .itemTooltip,
+.equipSlot:hover .itemTooltip,
+.shopItem:hover .itemTooltip {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#topInfo {
+  backdrop-filter: blur(10px);
+}
+
+.infoBadge {
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+}
+
+#statusHud,
+#skillHud,
+#itemHud {
+  backdrop-filter: blur(14px);
+}
+
+.panel {
+  backdrop-filter: blur(14px);
+}
+
+#inventory::-webkit-scrollbar,
+#dialogueText::-webkit-scrollbar,
+#inventoryContent::-webkit-scrollbar,
+#shopItems::-webkit-scrollbar,
+#skillsContent::-webkit-scrollbar,
+#statsContent::-webkit-scrollbar {
+  width: 10px;
+}
+
+#dialogueText::-webkit-scrollbar-thumb,
+#inventoryContent::-webkit-scrollbar-thumb,
+#shopItems::-webkit-scrollbar-thumb,
+#skillsContent::-webkit-scrollbar-thumb,
+#statsContent::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 223, 167, 0.28);
+}
+
+#inventoryContent::-webkit-scrollbar-track,
+#dialogueText::-webkit-scrollbar-track,
+#shopItems::-webkit-scrollbar-track,
+#skillsContent::-webkit-scrollbar-track,
+#statsContent::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.04);
+  border-radius: 999px;
+}
+
+.itemIcon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+  flex: 0 0 auto;
+}
+
+.subText,
+.slotAction,
+.equipAction,
+.skillMeta {
+  font-size: 12px;
+  color: rgba(255, 241, 220, 0.62);
+}
+
+.skillCard {
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+
+.skillCardInfo {
+  flex: 1;
+  min-width: 220px;
+}
+
+.skillCardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff4d2;
+}
+
+.skillCardDesc {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(255, 241, 220, 0.82);
+}
+
+.skillCard.learned {
+  border-color: rgba(255, 211, 120, 0.3);
+  background: linear-gradient(180deg, rgba(104, 69, 28, 0.22), rgba(255, 255, 255, 0.03));
+}
+
+.skillCard.lockedSkill {
+  opacity: 0.62;
+}
+
+.skillStageHeader {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(255, 213, 125, 0.12), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 224, 163, 0.12);
+  color: #ffe3ab;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
+
+.skillCard.stage-basic {
+  border-left: 4px solid rgba(222, 214, 186, 0.8);
+}
+
+.skillCard.stage-advanced {
+  border-left: 4px solid rgba(120, 196, 255, 0.9);
+}
+
+.skillCard.stage-master {
+  border-left: 4px solid rgba(255, 173, 104, 0.9);
+}
+
+.skillCard.stage-ultimate {
+  border-left: 4px solid rgba(255, 104, 104, 0.95);
+  box-shadow: 0 0 0 1px rgba(255, 117, 117, 0.12), inset 0 0 24px rgba(255, 132, 93, 0.05);
+}
+
+@media (max-width: 900px) {
+  #topButtons {
+    top: auto;
+    bottom: 14px;
+    right: 14px;
+  }
+
+  #statusHud,
+  #skillHud,
+  #itemHud {
+    bottom: 92px;
+    width: calc(100vw - 28px);
+    min-width: 0;
+  }
+
+  #statusHud,
+  #skillHud,
+  #itemHud {
+    left: 14px;
+    right: 14px;
+    transform: none;
+  }
+
+  #statusHud {
+    bottom: 232px;
+  }
+
+  #skillHud {
+    bottom: 140px;
+  }
+
+  #itemHud {
+    bottom: 56px;
+  }
+
+  #skillBar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #quickSlotBar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  #dialogueBox,
+  #inventory,
+  #skillsPanel {
+    bottom: 310px;
+  }
+}
